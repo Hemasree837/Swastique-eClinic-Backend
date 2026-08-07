@@ -1,7 +1,1 @@
-package com.clinic.enums;
-
-public enum Status {
-		PENDING,
-	    APPROVED,
-	    REJECTED
-}
+package com.clinic.enums; public enum Status { PENDING,APPROVED,REJECTED,CANCELLED,COMPLETED }

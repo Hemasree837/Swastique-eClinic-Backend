@@ -1,7 +1,1 @@
-package com.clinic.enums;
-
-public enum Role {
-    ADMIN,
-    PATIENT,
-    REPORTER
-}
+package com.clinic.enums; public enum Role { ADMIN,PATIENT,DOCTOR }

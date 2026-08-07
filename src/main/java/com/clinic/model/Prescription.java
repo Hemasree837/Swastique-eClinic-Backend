@@ -1,0 +1,1 @@
+package com.clinic.model; import jakarta.persistence.*; @Entity public class Prescription{@Id @GeneratedValue(strategy=GenerationType.IDENTITY) public Long id; @OneToOne public Appointment appointment; @Column(length=3000) public String medicines; @Column(length=3000) public String notes;}

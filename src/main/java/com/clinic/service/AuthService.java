@@ -1,26 +1,48 @@
 package com.clinic.service;
+import com.clinic.config.JwtUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.clinic.model.User;
 import com.clinic.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    @Autowired
-    private UserRepository repo;
+    private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    public AuthService(
+            UserRepository repo,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil
+    ) {
+        this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     public User register(User user) {
+
+        if (repo.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return repo.save(user);
     }
 
-    public User login(String username, String password) {
-        User user = repo.findByUsername(username);
+    public String login(String username, String password) {
 
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+        User user = repo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
         }
-        throw new RuntimeException("Invalid credentials");
+
+        return jwtUtil.generate(user.getUsername(), user.getRole().name());
     }
 }

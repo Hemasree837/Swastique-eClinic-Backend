@@ -18,32 +18,40 @@ public class DoctorService {
         return repo.findAll();
     }
 
+    public Doctor getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+    }
+
     public Doctor save(Doctor doctor) {
         return repo.save(doctor);
     }
 
     public Doctor toggleLeave(Long id) {
-        Doctor doc = repo.findById(id).orElseThrow();
+        Doctor doctor = getById(id);
 
-        doc.setOnLeave(!doc.isOnLeave());
+        doctor.setOnLeave(!doctor.isOnLeave());
 
-        return repo.save(doc);
+        return repo.save(doctor);
     }
 
     public Doctor update(Long id, Doctor doctor) {
 
-        Doctor existing = repo.findById(id).orElseThrow();
+        Doctor existing = getById(id);
 
         existing.setName(doctor.getName());
         existing.setSpecialization(doctor.getSpecialization());
+        existing.setPhone(doctor.getPhone());
         existing.setExperience(doctor.getExperience());
         existing.setAvailableSlots(doctor.getAvailableSlots());
         existing.setImageUrl(doctor.getImageUrl());
+        existing.setOnLeave(doctor.isOnLeave());
 
         return repo.save(existing);
     }
 
     public void delete(Long id) {
-        repo.deleteById(id);
+        Doctor doctor = getById(id);
+        repo.delete(doctor);
     }
 }

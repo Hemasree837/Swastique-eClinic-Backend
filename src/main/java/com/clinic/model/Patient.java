@@ -1,0 +1,1 @@
+package com.clinic.model; import jakarta.persistence.*; @Entity public class Patient{@Id @GeneratedValue(strategy=GenerationType.IDENTITY) public Long id; public String name; public Integer age; public String gender; public String phone; @Column(length=1000) public String address; @Column(length=3000) public String medicalHistory;}

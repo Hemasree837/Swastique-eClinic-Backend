@@ -1,0 +1,1 @@
+package com.clinic.dto; import com.clinic.enums.Role; public record RegisterRequest(String username,String password,Role role){}

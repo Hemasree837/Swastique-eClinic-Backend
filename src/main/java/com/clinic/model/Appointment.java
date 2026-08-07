@@ -1,9 +1,10 @@
 package com.clinic.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
+
+import com.clinic.enums.Status;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Appointment {
@@ -12,11 +13,21 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String patientName;
-    private String doctorName;
-    private String date;
-    private String time;
-    private String status;
+    @ManyToOne
+    private Doctor doctor;
+
+    @ManyToOne
+    private Patient patient;
+
+    private LocalDateTime appointmentTime;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDING;
+
+    private String reason;
+
+    public Appointment() {
+    }
 
     public Long getId() {
         return id;
@@ -26,43 +37,43 @@ public class Appointment {
         this.id = id;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
-    public String getDoctorName() {
-        return doctorName;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDateTime getAppointmentTime() {
+        return appointmentTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setAppointmentTime(LocalDateTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }
